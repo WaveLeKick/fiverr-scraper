@@ -1,346 +1,364 @@
-[Fiverr Scraper](https://apify.com/sovereigntaylor/fiverr-scraper?fpr=data)
+[Fiverr Scraper](https://apify.com/igview-owner/fiverr-scraper?fpr=data)
 
-Scrape Fiverr gig listings, freelancer profiles, and reviews without API keys. Extract pricing packages, seller levels, ratings, delivery times, and full review text for freelance marketplace research and competitive intelligence.
+# Fiverr Search Gig Scraper 🎯
 
-## Features
+Extract comprehensive Fiverr gig data with a simple keyword search. Get gig titles, seller information, pricing, ratings, performance metrics, and more in seconds. Perfect for market research, competitor analysis, price comparison, and lead generation. 🚀
 
-- **Gig search** — Search by keyword, category, price range, seller level, and sort order
-- **Direct gig scraping** — Provide specific gig URLs for detailed extraction
-- **Seller profiles** — Extract complete freelancer profiles with stats, skills, and languages
-- **Reviews** — Optionally scrape reviews for each gig with reviewer details
-- **3 pricing packages** — Extract Basic, Standard, and Premium package details per gig
-- **Smart extraction** — Parses `__NEXT_DATA__` JSON (primary) with HTML fallback
-- **Anti-bot handling** — Detects blocks/CAPTCHAs and stops gracefully
-- **12 User-Agent rotation** — Browser fingerprint diversity
-- **Fiverr-specific headers** — Mimics real browser requests
-- **Proxy support** — Residential proxies recommended for reliable results
-- **Rate limiting** — Max 15 requests/minute to avoid detection
-- **Pay-per-event** — Only pay for data you actually get
+---
 
-## Use Cases
+## 📋 Table of Contents
 
-### Competitive Intelligence
+- What You Get
+- How to Use
+- Input Parameters
+- Output Data
+- Use Cases
+- Tips & Best Practices
+- FAQ
 
-Monitor competitors' pricing, delivery times, and review counts across your Fiverr category. Track how top sellers position their gigs.
+---
 
-### Market Research
+## 🎯 What You Get
 
-Analyze freelance marketplace trends — which categories are growing, what price points succeed, and where demand exceeds supply.
+This Fiverr scraper extracts comprehensive gig information:
 
-### Pricing Intelligence
+### 📝 Gig Details
 
-Benchmark your freelance rates against hundreds of comparable gigs. Find the optimal price point for each service tier.
+- **Basic Info**: Gig ID, title, URL, slug, thumbnail
+- **Gallery Images**: All gig portfolio images (optional)
+- **Categories**: Category and subcategory IDs
 
-### Freelancer Recruitment
+### 👤 Seller Information
 
-Search for skilled freelancers by category, rating, and seller level. Extract contact-ready profiles for recruitment outreach.
+- **Profile**: Username, display name, profile image
+- **Location**: Country code
+- **Status**: Online status, Pro badge
+- **Level**: Seller level (new, level 1, level 2, top rated)
+- **Languages**: Spoken languages with proficiency levels
+- **Ratings**: Overall rating score and review count
 
-### Trend Analysis
+### 💰 Pricing Details
 
-Track new gigs and emerging categories on Fiverr. Identify rising niches (AI services, blockchain, etc.) before they saturate.
+- **Starting Price**: Minimum gig price
+- **Currency**: USD, EUR, etc.
+- **Package Info**: Recommended package details
+- **Delivery Time**: Delivery days for each package
+- **Total Packages**: Number of pricing tiers available
 
-### Content Strategy
+### 📈 Performance Metrics
 
-Analyze top-performing gig titles, descriptions, and tags. Reverse-engineer what makes best-selling gig copy work.
+- **Position**: Search result position
+- **Badges**: Fiverr's Choice, Featured status
+- **Buying Metrics**: Buying rating and review count
+- **Impression ID**: Unique impression identifier
 
-## Input
+### ⚙️ Features & Capabilities
 
-| Field | Type | Default | Description |
+- Consultation availability
+- Video intro presence
+- Work samples availability
+- Recurring options
+- Personalized pricing
+
+---
+
+## 🚀 How to Use
+
+### Quick Start (3 Steps)
+
+1. **Enter Search Query**: Type the service you're looking for (e.g., "logo design", "voice over")
+2. **Configure Options**: Set pages to scrape and data options
+3. **Run & Export**: Click start, wait for results, then export as JSON/CSV/Excel
+
+No coding required! Simple form-based interface with emoji-rich descriptions. ✨
+
+---
+
+## ⚙️ Input Parameters
+
+### 🔎 Search Configuration
+
+| Parameter | Type | Required | Description | Default |
+| --- | --- | --- | --- | --- |
+| **query** 🔍 | string | ✅ Yes | Service or keyword to search (e.g., "poster design", "wordpress developer") | `poster design` |
+| **startPage** 📄 | integer | No | Page number to start from (each page ≈ 48 gigs) | `1` |
+| **maxPages** 📚 | integer | No | Maximum pages to scrape (1-50) | `1` |
+
+### ⚙️ Data Options
+
+| Parameter | Type | Description | Default |
 | --- | --- | --- | --- |
-| `searchQuery` | String | *(empty)* | Search Fiverr gigs by keyword (e.g., "logo design") |
-| `gigUrls` | String[] | `[]` | Direct Fiverr gig URLs to scrape |
-| `sellerProfiles` | String[] | `[]` | Seller profile URLs or usernames |
-| `maxResults` | Integer | `50` | Max gigs from search (1-500) |
-| `category` | String | *(all)* | Category filter (graphics-design, programming-tech, etc.) |
-| `minPrice` | Integer | `0` | Minimum price filter |
-| `maxPrice` | Integer | `0` | Maximum price filter |
-| `sellerLevel` | Enum | `any` | Filter: any, new_seller, level_one, level_two, top_rated |
-| `sortBy` | Enum | `relevance` | Sort: relevance, best_selling, newest, price_low, price_high |
-| `includeReviews` | Boolean | `false` | Also scrape reviews for each gig |
-| `maxReviewsPerGig` | Integer | `20` | Max reviews per gig (1-100) |
-| `maxConcurrency` | Integer | `3` | Parallel requests (lower = safer) |
-| `proxyConfiguration` | Object | *(none)* | Apify proxy settings |
+| **includeSellerDetails** 👤 | boolean | Extract seller info (username, rating, level, etc.) | `true` |
+| **includePricing** 💰 | boolean | Extract pricing and package details | `true` |
+| **includePerformance** 📈 | boolean | Extract performance metrics and badges | `true` |
+| **includeGallery** 🖼️ | boolean | Extract all gallery image URLs | `false` |
 
-### Categories
-
-| Slug | Category |
-| --- | --- |
-| `graphics-design` | Graphics & Design |
-| `digital-marketing` | Digital Marketing |
-| `writing-translation` | Writing & Translation |
-| `video-animation` | Video & Animation |
-| `music-audio` | Music & Audio |
-| `programming-tech` | Programming & Tech |
-| `business` | Business |
-| `lifestyle` | Lifestyle |
-| `ai-services` | AI Services |
-
-## Input Examples
-
-### Search for logo designers, sorted by best selling
+### Example Input
 
 ```
 {
-    "searchQuery": "logo design",
-    "sortBy": "best_selling",
-    "maxResults": 100,
-    "proxyConfiguration": {
-        "useApifyProxy": true,
-        "apifyProxyGroups": ["RESIDENTIAL"]
-    }
+  "query": "logo design",
+  "startPage": 1,
+  "maxPages": 3,
+  "includeSellerDetails": true,
+  "includePricing": true,
+  "includePerformance": true,
+  "includeGallery": false
 }
 ```
 
-### Top-rated web developers under $200
+---
+
+## 📊 Output Data
+
+Each gig is saved as a separate result with comprehensive data:
+
+### Sample Output
 
 ```
 {
-    "searchQuery": "web development",
-    "category": "programming-tech",
-    "sellerLevel": "top_rated",
-    "maxPrice": 200,
-    "maxResults": 50,
-    "includeReviews": true,
-    "proxyConfiguration": {
-        "useApifyProxy": true,
-        "apifyProxyGroups": ["RESIDENTIAL"]
-    }
+  "id": 449562576,
+  "title": "design professional flyers and posters to boost your brand",
+  "url": "https://www.fiverr.com/fist_of_fury/design-professional-flyers-and-posters-to-boost-your-brand",
+  "slug": "design-professional-flyers-and-posters-to-boost-your-brand",
+  "thumbnail": "https://fiverr-res.cloudinary.com/t_main1,q_auto,f_auto/gigs/449562576/original/...",
+  
+  "seller_id": 3483309,
+  "seller_username": "fist_of_fury",
+  "seller_displayName": "Usama Z",
+  "seller_country": "PK",
+  "seller_isOnline": true,
+  "seller_isPro": false,
+  "seller_level": "top_rated_seller",
+  "seller_languages": "en (Level 3)",
+  "seller_rating_score": 4.9141455,
+  "seller_rating_count": 4333,
+  
+  "starting_price": 25,
+  "currency": "USD",
+  "delivery_days": 1,
+  "total_packages": 3,
+  
+  "position": 1,
+  "isFiverrChoice": false,
+  "isFeatured": false,
+  "buying_rating": 4.9,
+  "buying_review_count": 11,
+  
+  "category_id": 3,
+  "subcategory_id": 55,
+  "offerConsultation": true,
+  "hasVideoIntro": false,
+  "hasWorkSamples": true,
+  
+  "scraped_at": "2024-11-24T06:34:12.345Z"
 }
 ```
 
-### Scrape specific gig pages
+### 📋 Table Views
 
-```
-{
-    "gigUrls": [
-        "https://www.fiverr.com/seller1/i-will-design-a-logo",
-        "https://www.fiverr.com/seller2/i-will-build-your-website"
-    ],
-    "includeReviews": true,
-    "maxReviewsPerGig": 50,
-    "proxyConfiguration": {
-        "useApifyProxy": true,
-        "apifyProxyGroups": ["RESIDENTIAL"]
-    }
-}
-```
+The actor provides two organized table views:
 
-### Extract seller profiles
+#### 📊 Gigs Overview
 
-```
-{
-    "sellerProfiles": [
-        "https://www.fiverr.com/johndoe",
-        "janedoe",
-        "topdesigner123"
-    ],
-    "proxyConfiguration": {
-        "useApifyProxy": true,
-        "apifyProxyGroups": ["RESIDENTIAL"]
-    }
-}
-```
+Clean, essential data for quick analysis:
 
-### AI services — newest gigs
+- Gig ID, Title, URL, Thumbnail
+- Seller Username, Name, Country, Level
+- Rating, Reviews, Price, Delivery Time
+- Position in search results
 
-```
-{
-    "searchQuery": "AI chatbot",
-    "category": "ai-services",
-    "sortBy": "newest",
-    "maxResults": 200,
-    "proxyConfiguration": {
-        "useApifyProxy": true,
-        "apifyProxyGroups": ["RESIDENTIAL"]
-    }
-}
-```
+#### 📋 Detailed View
 
-## Output
+Comprehensive data including:
 
-### Gig Output
+- All overview fields
+- Online status, Pro badge
+- Package details, buying metrics
+- Category IDs, features, video intro
 
-Each scraped gig is saved to the dataset with the following fields:
+### Export Formats
 
-```
-{
-    "type": "gig",
-    "title": "I will design a professional logo for your brand",
-    "description": "Full gig description text...",
-    "priceStarting": 25,
-    "priceCurrency": "USD",
-    "packages": [
-        {
-            "tier": "Basic",
-            "price": 25,
-            "deliveryDays": 3,
-            "revisions": 2,
-            "description": "1 logo concept + PNG file"
-        },
-        {
-            "tier": "Standard",
-            "price": 50,
-            "deliveryDays": 2,
-            "revisions": 5,
-            "description": "3 logo concepts + source files"
-        },
-        {
-            "tier": "Premium",
-            "price": 100,
-            "deliveryDays": 1,
-            "revisions": "Unlimited",
-            "description": "5 concepts + full brand kit"
-        }
-    ],
-    "sellerUsername": "prodesigner",
-    "sellerDisplayName": "Pro Designer Studio",
-    "sellerLevel": "Top Rated Seller",
-    "sellerRating": 4.9,
-    "sellerCountry": "US",
-    "sellerImage": "https://...",
-    "deliveryTime": "3 days",
-    "revisions": 2,
-    "rating": 4.9,
-    "reviewCount": 1523,
-    "ordersInQueue": 12,
-    "tags": ["logo design", "branding", "minimalist"],
-    "category": "Graphics & Design",
-    "subcategory": "Logo Design",
-    "imageUrl": "https://...",
-    "videoUrl": null,
-    "gigUrl": "https://www.fiverr.com/prodesigner/i-will-design-a-professional-logo",
-    "isFeatured": false,
-    "isProVerified": true,
-    "createdAt": "2024-03-15T00:00:00.000Z",
-    "scrapedAt": "2026-03-01T12:00:00.000Z"
-}
-```
+- **JSON**: Full structured data with all fields
+- **CSV**: Spreadsheet-friendly format
+- **Excel**: Ready for analysis and reporting
 
-### Seller Output
+---
 
-```
-{
-    "type": "seller",
-    "username": "prodesigner",
-    "displayName": "Pro Designer Studio",
-    "tagline": "Award-winning graphic designer with 10+ years experience",
-    "description": "Full seller bio...",
-    "level": "Top Rated Seller",
-    "rating": 4.9,
-    "reviewCount": 3200,
-    "responseTime": "1 hour",
-    "lastDelivery": "about 2 hours ago",
-    "memberSince": "Jan 2019",
-    "country": "United States",
-    "languages": ["English", "Spanish"],
-    "profilePicUrl": "https://...",
-    "skills": ["Logo Design", "Brand Identity", "Adobe Illustrator"],
-    "totalGigs": 15,
-    "completedOrders": 4500,
-    "profileUrl": "https://www.fiverr.com/prodesigner",
-    "isPro": true,
-    "isOnline": true,
-    "scrapedAt": "2026-03-01T12:00:00.000Z"
-}
-```
+## 💼 Use Cases
 
-### Review Output
+### 🎯 Market Research
 
-```
-{
-    "type": "review",
-    "reviewerName": "happyclient",
-    "reviewerCountry": "United Kingdom",
-    "rating": 5,
-    "text": "Amazing work! Delivered exactly what I needed, ahead of schedule.",
-    "date": "2026-02-15T00:00:00.000Z",
-    "gigTitle": "I will design a professional logo for your brand",
-    "price": 50,
-    "deliveryTime": "2 days",
-    "gigUrl": "https://www.fiverr.com/prodesigner/i-will-design-a-professional-logo",
-    "scrapedAt": "2026-03-01T12:00:00.000Z"
-}
-```
+- Analyze service offerings in your niche
+- Identify trending services and keywords
+- Study pricing strategies across categories
+- Track market saturation levels
 
-## Proxy Recommendations
+### 🔍 Competitor Analysis
 
-Fiverr has aggressive anti-bot protection. **Residential proxies are strongly recommended** for any scraping beyond a few pages.
+- Monitor competitor gig performance
+- Compare pricing and delivery times
+- Analyze top-rated seller strategies
+- Track Fiverr's Choice and Featured gigs
 
-| Setup | Reliability | Speed | Cost |
-| --- | --- | --- | --- |
-| No proxy | Low (blocked quickly) | Fast | Free |
-| Datacenter proxy | Low-Medium | Fast | Low |
-| **Residential proxy** | **High** | Medium | Medium |
-| SERP proxy | Medium | Medium | Medium |
+### 💰 Price Intelligence
 
-### Recommended proxy configuration:
+- Compare pricing across sellers
+- Identify optimal price points
+- Analyze package structures
+- Track pricing trends over time
 
-```
-{
-    "useApifyProxy": true,
-    "apifyProxyGroups": ["RESIDENTIAL"]
-}
-```
+### 👥 Lead Generation
 
-## Performance Tips
+- Find potential collaboration partners
+- Identify top sellers in your category
+- Build seller contact lists
+- Discover Pro sellers and agencies
 
-1. **Always use residential proxies** — Fiverr blocks datacenter IPs aggressively
-2. **Start with a small test** — Try `maxResults: 10` to verify scraping works before scaling
-3. **Keep concurrency low** — Default of 3 is safe; increase only with good proxies
-4. **Use filters** — Category, price, and seller level filters reduce pages to scrape
-5. **Disable reviews for speed** — Set `includeReviews: false` (default) for faster runs
-6. **Use direct URLs when possible** — Direct gig URLs skip search pagination entirely
+### 📈 SEO & Optimization
 
-## Rate Limiting
+- Research high-performing gig titles
+- Analyze successful gig positioning
+- Study category and subcategory trends
+- Identify keyword opportunities
 
-This actor limits requests to 15 per minute to respect Fiverr's infrastructure. The scraper:
+### 🎨 Portfolio Building
 
-- Rotates through 12 different User-Agent strings
-- Sends browser-like headers (Accept, Referer, Sec-Fetch-*)
-- Detects CAPTCHA/block pages and stops gracefully
-- Retries failed requests up to 3 times
-- Stops entirely after 3 consecutive blocks
+- Collect design inspiration
+- Study successful gig presentations
+- Analyze gallery image strategies
+- Research video intro effectiveness
 
-## Pricing (Pay Per Event)
+---
 
-| Event | Price | Description |
-| --- | --- | --- |
-| `gig-scraped` | $0.003 | Each gig saved to dataset |
-| `seller-scraped` | $0.005 | Each seller profile saved |
-| `review-scraped` | $0.002 | Each batch of reviews saved |
+## 💡 Tips & Best Practices
 
-Plus Apify platform costs (compute + proxy if used).
+### 🔍 Search Optimization
 
-## Legal Notice
+- **Be Specific**: Use detailed keywords like "minimalist logo design" instead of just "logo"
+- **Try Variations**: Test different keyword combinations to find all relevant gigs
+- **Use Categories**: Include category names like "wordpress", "voice over", "video editing"
+- **Check Spelling**: Ensure correct spelling for accurate results
 
-This actor is provided as a technical tool for market research and competitive analysis. Users are responsible for ensuring their use complies with Fiverr's Terms of Service and all applicable laws. The actor is designed for legitimate research purposes.
+### 📊 Data Collection
 
-## Integration — Python
+- **Start Small**: Test with 1-2 pages first, then scale up
+- **Respect Rate Limits**: The actor includes 2-second delays between pages
+- **Monitor Costs**: Each page ≈ 48 gigs, plan your maxPages accordingly
+- **Regular Updates**: Re-run weekly/monthly to track changes
 
-```
-from apify_client import ApifyClient
+### 💾 Data Management
 
-client = ApifyClient("YOUR_API_TOKEN")
-run = client.actor("sovereigntaylor/fiverr-scraper").call(run_input={
-    "searchTerm": "fiverr",
-    "maxResults": 50
-})
+- **Choose Data Options Wisely**:
 
-for item in client.dataset(run["defaultDatasetId"]).iterate_items():
-    print(f"{item.get('title', item.get('name', 'N/A'))}")
-```
+- Enable `includeGallery` only if you need image URLs (increases data size)
+- Keep other options enabled for comprehensive analysis
+- **Export Strategically**:
 
-## Integration — JavaScript
+- JSON for databases and APIs
+- CSV for Excel and Google Sheets
+- Excel for business reports
+- **Track Timestamps**: Use `scraped_at` field to track data freshness
 
-```
-import { ApifyClient } from 'apify-client';
-const client = new ApifyClient({ token: 'YOUR_API_TOKEN' });
+### ⚡ Performance
 
-const run = await client.actor('sovereigntaylor/fiverr-scraper').call({
-    searchTerm: 'fiverr',
-    maxResults: 50
-});
+- **Batch Processing**: Run multiple searches with different queries
+- **Schedule Runs**: Use Apify scheduling for automated data collection
+- **Parallel Actors**: Run multiple actor instances for different categories
+- **Monitor Logs**: Check console output for errors and progress
 
-const { items } = await client.dataset(run.defaultDatasetId).listItems();
-items.forEach(item => console.log(item.title || item.name || 'N/A'));
-```
+### 🎯 Analysis Tips
+
+- **Sort by Position**: Find top-ranking gigs
+- **Filter by Rating**: Identify high-quality sellers (4.8+ rating)
+- **Compare Prices**: Analyze pricing strategies
+- **Track Badges**: Focus on Fiverr's Choice and Featured gigs
+- **Study Levels**: Compare new sellers vs. top-rated sellers
+
+---
+
+## ❓ FAQ
+
+### What data can I extract?
+
+You can extract gig titles, URLs, seller information (username, rating, level, country), pricing details, delivery times, performance metrics, badges, categories, features, and optionally gallery images.
+
+### Do I need coding skills?
+
+No! This is a no-code solution. Just fill in the search query and options in the simple form interface with helpful emoji descriptions.
+
+### How many gigs can I scrape?
+
+Each page contains approximately 48 gigs. You can scrape up to 50 pages per run (≈2,400 gigs). For more, run the actor multiple times.
+
+### Is this legal?
+
+Yes. This scraper extracts publicly available data from Fiverr that anyone can see. Always comply with Fiverr's Terms of Service and applicable laws. Use responsibly.
+
+### Can I automate this?
+
+Yes! Use Apify's scheduling feature to run the scraper automatically at set intervals (hourly, daily, weekly, etc.).
+
+### What if I get errors?
+
+- **429**: Rate limit exceeded, wait and try again or upgrade your plan
+- **No results**: Verify your search query and try different keywords
+- **Timeout**: Reduce maxPages or check your internet connection
+
+### How do I export the data?
+
+After the run completes:
+
+1. Go to the **Storage** → **Dataset** tab
+2. Choose a view: "📊 Gigs Overview" or "📋 Detailed View"
+3. Click **Export** and select format (JSON, CSV, Excel)
+4. Download your data
+
+### Can I scrape specific categories?
+
+Yes! Include category names in your search query (e.g., "logo design", "wordpress development", "voice over artist").
+
+### How often should I run this?
+
+Depends on your use case:
+
+- **Market Research**: Weekly or monthly
+- **Competitor Tracking**: Daily or weekly
+- **Price Monitoring**: Weekly
+- **One-time Analysis**: As needed
+
+### Can I scrape seller profiles?
+
+This actor focuses on gig search results. For detailed seller profiles, you may need additional tools or API endpoints.
+
+### How accurate is the data?
+
+The data comes directly from Fiverr's search results and is as accurate as what Fiverr displays. Data freshness depends on when you run the scraper.
+
+---
+
+### Features
+
+- ✅ Clean, organized table views with emojis
+- ✅ Configurable data extraction options
+- ✅ Automatic rate limiting (2s delay between pages)
+- ✅ Comprehensive error handling
+- ✅ Progress logging with emojis
+- ✅ Flat data structure for easy analysis
+- ✅ Timestamp tracking
+- ✅ Multiple export formats
+
+---
+
+## 📞 Support
+
+Need help? Have questions?
+
+- **Documentation**: You're reading it! 📖
+- **Apify Support**: Contact via Apify platform
+
+---
+
+## 🏷️ Find Me
+
+Fiverr scraper, Fiverr gig scraper, Fiverr data extraction, scrape Fiverr, Fiverr search scraper, Fiverr API, freelance marketplace scraper, gig economy data, Fiverr lead generation, Fiverr market research, Fiverr competitor analysis, Fiverr price comparison, Fiverr seller data, Fiverr gig data, extract Fiverr data, Fiverr automation, Fiverr data mining, Fiverr business intelligence, Fiverr analytics, Fiverr pricing data, Fiverr rating scraper, Fiverr review scraper, freelance data scraper, gig scraper, service marketplace scraper, Apify Fiverr, no-code Fiverr scraper, Fiverr to Excel, Fiverr to CSV, export Fiverr data, Fiverr bulk export, Fiverr search API, Fiverr gig search, Fiverr category scraper
